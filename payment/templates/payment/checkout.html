@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row my-3">
+    <div class="col-6 offset-3">
+        <h3 class="text-center mb-3">Checkout</h3>
+        <form action="" id="form" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label class="form-label" for="name">Name</label>
+                <input class="form-control" type="text" name="" id="name">
+            </div>
+            <div>
+                <label class="form-label" for="email">Email</label>
+                <input class="form-control" type="email" name="" id="email">
+            </div>
+            <div class="mt-3">   
+                <label class="form-label" for="email">Card Details</label>
+                <div id="card-info"></div>
+            </div>
+            <button id="pay" class="btn btn-primary mt-4 mb-3" type="submit">
+                Pay
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block script %}
+
+<script src="https://js.stripe.com/v3/"></script>
+<script type="text/javascript">
+    var stripe = Stripe('{{request.session.stripe_pk}}');
+    var elements = stripe.elements({
+        clientSecret: '{{request.session.client_secret}}',
+    });
+    var loader = false
+    var cardElement = elements.create('card', {
+        hidePostalCode: true,
+        style: {
+            base: {
+             iconColor: '#666EE8',
+             color: '#31325F',
+             lineHeight: '40px',
+             fontWeight: 300,
+             fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+             fontSize: '15px',
+           
+             '::placeholder': {
+               color: '#CFD7E0',
+              },
+             }, 
+            } 
+    });
+    cardElement.mount('#card-info')
+
+    var form = document.getElementById('form');
+    form.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        loader = true
+        var pay = document.getElementById("pay")
+        if(loader) {
+            pay.innerHTML = '<div class="lds-ring"><div></div><div></div><div></div><div></div></div>'
+        }
+        var name = document.getElementById('name');
+        var email = document.getElementById('email')
+        const billing = {
+            'name': name,
+            'email': email
+        }
+        const paymentMethodReq = await stripe.createPaymentMethod({
+            type: "card",
+            card: cardElement,
+            billing_details: billing
+        })
+        if(!paymentMethodReq.error) {
+            const { error } = await stripe.confirmCardPayment('{{request.session.client_secret}}', {
+                payment_method: {
+                    card: cardElement
+                }
+            });
+            if(!error) {
+                location.href = '/payment/payment-succeeded/{{request.session.intent_id}}'
+            }
+        }
+    })
+    form.reset()
+
+</script>
+
+
+{% endblock script %}

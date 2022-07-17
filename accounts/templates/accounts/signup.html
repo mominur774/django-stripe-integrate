@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3 class="text-center my-3">Sign Up</h3>
+<div class="row">
+    <div class="col-8 offset-2">
+        <form action="" method="post">
+            {% csrf_token %}
+        <div class="mb-3">
+            <div class="form-label">Username</div>
+            {{form.username}}
+        </div>
+        <div class="row mb-3">
+            <div class="col-6">
+                <div class="form-label">First Name</div>
+                {{form.first_name}}
+            </div>
+            <div class="col-6">
+                <div class="form-label">Last Name</div>
+                {{form.last_name}}
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="form-label">Email</div>
+            {{form.email}}
+        </div>
+        <div class="row mb-3">
+            <div class="col-6">
+                <div class="form-label">Password</div>
+                {{form.password1}}
+            </div>
+            <div class="col-6">
+                <div class="form-label">Confirm Password</div>
+                {{form.password2}}
+            </div>
+        </div>
+        <button class="btn btn-warning w-100 my-3" type="submit">Sign Up</button>
+        <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+    </form>
+    </div>
+</div>
+
+{% endblock content %}

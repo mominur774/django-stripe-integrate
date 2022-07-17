@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<h3 class="text-center my-3">Pricing List</h3>
+
+<div class="row">
+    {% for price in pricing %}
+    <div class="col-lg-4">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+              <h4 class="card-title">{{ price.name }}</h4>
+              <h5 class="card-title">${{ price.price }}</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              <a href="{% url 'pricing-details' price.id %}" class="btn btn-primary">Buy now!</a>
+            </div>
+          </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock content %}

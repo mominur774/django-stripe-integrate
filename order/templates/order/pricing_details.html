@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+<h2>Place Order</h2>
+
+<form method="post" class="row">
+    {% csrf_token %}
+    <div class="col-lg-8">
+        <input type="text" class="form-control w-50" placeholder="Enter address" name="address" id=""> <br><br>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit totam quas quae ducimus, libero ipsum laborum blanditiis temporibus est esse assumenda possimus dolore corporis necessitatibus quaerat nobis consequatur. Blanditiis eligendi impedit voluptate cumque debitis qui corrupti excepturi voluptatum assumenda? Fuga, sit sint. Temporibus suscipit ut nostrum, delectus nobis perspiciatis optio.</p>
+    </div>
+    <div class="col-lg-4">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{pricing.name}}</td>
+                    <td>${{pricing.price}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-warning w-100" type="submit">Place Order</button>
+    </div>
+</form>
+
+{% endblock content %}
